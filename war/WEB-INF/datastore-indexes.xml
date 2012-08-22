@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<datastore-indexes autoGenerate="true">
+
+	<datastore-index kind="Article" ancestor="false"
+		source="auto">
+		<property name="catelog" direction="asc" />
+		<property name="date" direction="desc" />
+	</datastore-index>
+
+</datastore-indexes>

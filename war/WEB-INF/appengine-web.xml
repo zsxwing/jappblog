@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
+	<application>zsxblog</application>
+	<version>4</version>
+
+	<!-- Configure java.util.logging -->
+	<system-properties>
+		<property name="java.util.logging.config.file" value="WEB-INF/logging.properties" />
+	</system-properties>
+
+	<sessions-enabled>true</sessions-enabled>
+	<warmup-requests-enabled>true</warmup-requests-enabled>
+	<precompilation-enabled>true</precompilation-enabled>
+
+	<static-files>
+		<include path="/ckeditor/**" expiration="30d" />
+		<include path="/jquery/**" expiration="30d" />
+		<include path="/theme/**" expiration="30d" />
+        <include path="/wp-cumulus/**" expiration="30d" />
+		
+		<include path="/del.png" expiration="30d" />
+		<include path="/del.gif" expiration="30d" />
+		<include path="/404.png" expiration="30d" />
+		
+		<include path="/favicon.ico" expiration="1d" />
+		<include path="/robots.txt" expiration="1d" />
+	</static-files>
+	
+</appengine-web-app>

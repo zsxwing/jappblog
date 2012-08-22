@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/recaptcha4j-0.0.7.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/rome-1.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-beans.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-context.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-context-support.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-core.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-jdbc.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-orm.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-tx.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-web.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/spring-webmvc.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/freemarker-gae-pre3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/jdom.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-collections-3.2.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-configuration-1.6.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-fileupload-1.2.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-lang-2.5.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-logging-1.1.1.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
