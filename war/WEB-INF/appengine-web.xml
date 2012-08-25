@@ -11,7 +11,8 @@
 	<sessions-enabled>true</sessions-enabled>
 	<warmup-requests-enabled>true</warmup-requests-enabled>
 	<precompilation-enabled>true</precompilation-enabled>
-
+    <threadsafe>true</threadsafe>
+    
 	<static-files>
 		<include path="/ckeditor/**" expiration="30d" />
 		<include path="/jquery/**" expiration="30d" />

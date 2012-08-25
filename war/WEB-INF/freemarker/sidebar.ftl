@@ -14,13 +14,16 @@
 	    		<li><a href="/admin/post.html">发表文章</a></li>
 	    		<li><a href="/admin/setup.html">设置博客</a></li>
 	    		<li><a href="https://appengine.google.com/">管理GAE</a></li>
+	    		<#if blog.evernoteDeveloperToken?has_content >
+	    		    <li><a href="/admin/evernote_note_list.html">从Evernote选择文章发布</a></li>
+	    		</#if>
 			</#if>
 	    </ul>
 	</li>
 	<script>
 	var operator=document.getElementById("operator");
 	var host=window.location.host || document.domain;
-	if(host.indexOf("appspot.com")<0) {
+	if(host.indexOf("appspot.com")<0 && host.indexOf("localhost:8888")<0) {
 	    operator.style.display="none";
 	}
 	</script>
