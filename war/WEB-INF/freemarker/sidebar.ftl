@@ -86,12 +86,6 @@
             </li>
         </ul>
     </li>
-    <li class="widget widget_recent_entries">       
-        <h2>新浪微博</h2>      
-        <ul>
-            <iframe id="sina_widget_1434468522" style="width:100%; height:500px;" frameborder="0" scrolling="no" src="http://v.t.sina.com.cn/widget/widget_blog.php?uid=1434468522&height=500&skin=wd_01&showpic=1"></iframe>
-        </ul>
-    </li>
 	
 </ul>
 </#escape>
