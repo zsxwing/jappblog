@@ -1,209 +1,217 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd"
-    default-init-method="init">
+	default-init-method="init">
 
-    <!-- Configure JDO for appengine using Spring ORM -->
-    <bean id="pmf"
-        class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">
-        <property name="jdoProperties">
-            <props>
-                <prop key="javax.jdo.PersistenceManagerFactoryClass">
-                    org.datanucleus.store.appengine.jdo.DatastoreJDOPersistenceManagerFactory
-                </prop>
-                <prop key="javax.jdo.option.ConnectionURL">
-                    appengine
-        </prop>
-                <prop key="javax.jdo.option.NontransactionalRead">
-                    true
-        </prop>
-                <prop key="javax.jdo.option.NontransactionalWrite">
-                    true
-        </prop>
-                <prop key="javax.jdo.option.RetainValues">
-                    true
-        </prop>
-                <prop key="datanucleus.appengine.autoCreateDatastoreTxns">
-                    true
-        </prop>
-            </props>
-        </property>
+	<!-- Configure JDO for appengine using Spring ORM -->
+	<bean id="pmf"
+		class="org.springframework.orm.jdo.LocalPersistenceManagerFactoryBean">
+		<property name="jdoProperties">
+			<props>
+				<prop key="javax.jdo.PersistenceManagerFactoryClass">
+					org.datanucleus.store.appengine.jdo.DatastoreJDOPersistenceManagerFactory
+				</prop>
+				<prop key="javax.jdo.option.ConnectionURL">
+					appengine
+				</prop>
+				<prop key="javax.jdo.option.NontransactionalRead">
+					true
+				</prop>
+				<prop key="javax.jdo.option.NontransactionalWrite">
+					true
+				</prop>
+				<prop key="javax.jdo.option.RetainValues">
+					true
+				</prop>
+				<prop key="datanucleus.appengine.autoCreateDatastoreTxns">
+					true
+				</prop>
+			</props>
+		</property>
 
-    </bean>
-
-
-    <!-- AppEngine Services to be created via the factory bean -->
-    <bean id="userService" class="com.google.appengine.api.users.UserServiceFactory"
-        factory-method="getUserService" />
-
-    <!-- Configure FreeMarker -->
-
-    <bean id="freemarkerConfig"
-        class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-        <property name="templateLoaderPath" value="WEB-INF/freemarker" />
-        <property name="freemarkerSettings">
-            <props>
-                <prop key="template_update_delay">5</prop>
-                <prop key="default_encoding">UTF-8</prop>
-                <prop key="locale">zh_CN</prop>
-            </props>
-        </property>
-    </bean>
-
-    <bean id="viewResolver"
-        class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-        <property name="suffix" value=".ftl" />
-        <property name="exposeSpringMacroHelpers">
-            <value>true</value>
-        </property>
-        <property name="exposeSessionAttributes">
-            <value>true</value>
-        </property>
-        <property name="contentType" value="text/html;charset=UTF-8" />
-    </bean>
-
-    <!-- DAO -->
-    <bean id="blogDao" class="zblog.dao.BlogDao">
-        <property name="persistenceManagerFactory" ref="pmf" />
-    </bean>
-
-    <bean id="articleDao" class="zblog.dao.ArticleDao">
-        <property name="persistenceManagerFactory" ref="pmf" />
-    </bean>
-
-    <bean id="catelogDao" class="zblog.dao.CatelogDao">
-        <property name="persistenceManagerFactory" ref="pmf" />
-        <property name="articleDao" ref="articleDao" />
-    </bean>
-
-    <bean id="replyDao" class="zblog.dao.ReplyDao">
-        <property name="persistenceManagerFactory" ref="pmf" />
-    </bean>
-
-    <bean id="resourceDao" class="zblog.dao.ResourceDao">
-        <property name="persistenceManagerFactory" ref="pmf" />
-    </bean>
-
-    <bean id="dao" class="zblog.dao.Dao">
-        <property name="blogDao" ref="blogDao" />
-        <property name="articleDao" ref="articleDao" />
-        <property name="catelogDao" ref="catelogDao" />
-        <property name="replyDao" ref="replyDao" />
-        <property name="userService" ref="userService" />
-        <property name="resourceDao" ref="resourceDao" />
-    </bean>
-
-    <!-- 获取文件的页面 -->
-    <bean name="/resource.html" class="zblog.controller.ResourceController">
-        <property name="resourceDao" ref="resourceDao" />
-    </bean>
-
-    <!-- 上传文件的页面，需要管理员 -->
-    <bean name="/admin/upload.html" class="zblog.controller.UploadController">
-        <property name="resourceDao" ref="resourceDao" />
-    </bean>
-
-    <!-- 首页 -->
-    <bean name="/index.html" class="zblog.controller.IndexController">
-        <property name="dao" ref="dao" />
-    </bean>
-
-    <!-- 配置博客的页面，需要管理员 -->
-    <bean name="/admin/setup.html" class="zblog.controller.SetupController">
-        <property name="formView" value="setup" />
-        <property name="blogDao" ref="blogDao" />
-        <property name="userService" ref="userService" />
-        <property name="webBindingInitializer" ref="webBindingInitializer" />
-    </bean>
-
-    <!-- 发表回复的页面 -->
-    <bean name="/reply.html" class="zblog.controller.ReplyController">
-        <property name="dao" ref="dao" />
-        <property name="webBindingInitializer" ref="webBindingInitializer" />
-    </bean>
-
-    <!-- 404页面 -->
-    <bean name="/404.html" class="zblog.controller.HTTP404Controller">
-        <property name="dao" ref="dao" />
-    </bean>
-
-    <!-- 查看一篇博客的页面 -->
-    <bean name="/show.html" class="zblog.controller.ShowController">
-        <property name="dao" ref="dao" />
-    </bean>
-
-    <!-- 重定向 -->
-    <bean name="/redirect.html" class="zblog.controller.RedirectController">
-        <property name="dao" ref="dao" />
-    </bean>
-
-    <!-- RSS页面 -->
-    <bean name="/rss.html" class="zblog.controller.RSSController">
-        <property name="rssView" ref="rssView" />
-    </bean>
-
-    <!-- 写文章的页面，需要管理员 -->
-    <bean name="/admin/post.html" class="zblog.controller.PostController">
-        <property name="formView" value="post" />
-        <property name="dao" ref="dao" />
-        <property name="webBindingInitializer" ref="webBindingInitializer" />
-    </bean>
-
-    <!-- 删除文章的页面，需要管理员 -->
-    <bean name="/admin/delete.html" class="zblog.controller.DeleteController">
-        <property name="dao" ref="dao" />
-    </bean>
-
-    <!-- 删除类别的页面，需要管理员 -->
-    <bean name="/admin/deleteCatelog.html" class="zblog.controller.DeleteCatelogController">
-        <property name="catelogDao" ref="catelogDao" />
-    </bean>
-
-    <!-- 删除回复的页面，需要管理员 -->
-    <bean name="/admin/deleteReply.html" class="zblog.controller.DeleteReplyController">
-        <property name="replyDao" ref="replyDao" />
-    </bean>
-
-    <!-- 重置catelog计数的页面，需要管理员 -->
-    <bean name="/admin/resetCatelog.html" class="zblog.controller.ResetCatelogController">
-        <property name="dao" ref="dao" />
-    </bean>
+	</bean>
 
 
-    <!-- 测试错误的页面 -->
-    <bean name="/error.html" class="zblog.controller.ErrorController" />
+	<!-- AppEngine Services to be created via the factory bean -->
+	<bean id="userService" class="com.google.appengine.api.users.UserServiceFactory"
+		factory-method="getUserService" />
 
-    <bean id="webBindingInitializer" class="zblog.gae.BindingInitializer" />
+	<!-- Configure FreeMarker -->
 
-    <bean id="rssView" class="zblog.viewer.RSSView">
-        <property name="dao" ref="dao" />
-    </bean>
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="WEB-INF/freemarker" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="template_update_delay">5</prop>
+				<prop key="default_encoding">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="viewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="suffix" value=".ftl" />
+		<property name="exposeSpringMacroHelpers">
+			<value>true</value>
+		</property>
+		<property name="exposeSessionAttributes">
+			<value>true</value>
+		</property>
+		<property name="contentType" value="text/html;charset=UTF-8" />
+	</bean>
+
+	<!-- DAO -->
+	<bean id="blogDao" class="zblog.dao.BlogDao">
+		<property name="persistenceManagerFactory" ref="pmf" />
+	</bean>
+
+	<bean id="articleDao" class="zblog.dao.ArticleDao">
+		<property name="persistenceManagerFactory" ref="pmf" />
+	</bean>
+
+	<bean id="catelogDao" class="zblog.dao.CatelogDao">
+		<property name="persistenceManagerFactory" ref="pmf" />
+		<property name="articleDao" ref="articleDao" />
+	</bean>
+
+	<bean id="replyDao" class="zblog.dao.ReplyDao">
+		<property name="persistenceManagerFactory" ref="pmf" />
+	</bean>
+
+	<bean id="resourceDao" class="zblog.dao.ResourceDao">
+		<property name="persistenceManagerFactory" ref="pmf" />
+	</bean>
+
+	<bean id="dao" class="zblog.dao.Dao">
+		<property name="blogDao" ref="blogDao" />
+		<property name="articleDao" ref="articleDao" />
+		<property name="catelogDao" ref="catelogDao" />
+		<property name="replyDao" ref="replyDao" />
+		<property name="userService" ref="userService" />
+		<property name="resourceDao" ref="resourceDao" />
+	</bean>
+
+	<!-- 获取文件的页面 -->
+	<bean name="/resource.html" class="zblog.controller.ResourceController">
+		<property name="resourceDao" ref="resourceDao" />
+	</bean>
+
+	<bean name="/admin/evernote_note_list.html" class="zblog.controller.EvernoteNoteListController" >
+	   <property name="dao" ref="dao" />
+	</bean>
+
+	<bean name="/admin/post_evernote_note.html" class="zblog.controller.PostEvernoteNoteController">
+		<property name="dao" ref="dao" />
+	</bean>
+
+	<!-- 上传文件的页面，需要管理员 -->
+	<bean name="/admin/upload.html" class="zblog.controller.UploadController">
+		<property name="resourceDao" ref="resourceDao" />
+	</bean>
+
+	<!-- 首页 -->
+	<bean name="/index.html" class="zblog.controller.IndexController">
+		<property name="dao" ref="dao" />
+	</bean>
+
+	<!-- 配置博客的页面，需要管理员 -->
+	<bean name="/admin/setup.html" class="zblog.controller.SetupController">
+		<property name="formView" value="setup" />
+		<property name="blogDao" ref="blogDao" />
+		<property name="userService" ref="userService" />
+		<property name="webBindingInitializer" ref="webBindingInitializer" />
+	</bean>
+
+	<!-- 发表回复的页面 -->
+	<bean name="/reply.html" class="zblog.controller.ReplyController">
+		<property name="dao" ref="dao" />
+		<property name="webBindingInitializer" ref="webBindingInitializer" />
+	</bean>
+
+	<!-- 404页面 -->
+	<bean name="/404.html" class="zblog.controller.HTTP404Controller">
+		<property name="dao" ref="dao" />
+	</bean>
+
+	<!-- 查看一篇博客的页面 -->
+	<bean name="/show.html" class="zblog.controller.ShowController">
+		<property name="dao" ref="dao" />
+	</bean>
+
+	<!-- 重定向 -->
+	<bean name="/redirect.html" class="zblog.controller.RedirectController">
+		<property name="dao" ref="dao" />
+	</bean>
+
+	<!-- RSS页面 -->
+	<bean name="/rss.html" class="zblog.controller.RSSController">
+		<property name="rssView" ref="rssView" />
+	</bean>
+
+	<!-- 写文章的页面，需要管理员 -->
+	<bean name="/admin/post.html" class="zblog.controller.PostController">
+		<property name="formView" value="post" />
+		<property name="dao" ref="dao" />
+		<property name="webBindingInitializer" ref="webBindingInitializer" />
+	</bean>
+
+	<!-- 删除文章的页面，需要管理员 -->
+	<bean name="/admin/delete.html" class="zblog.controller.DeleteController">
+		<property name="dao" ref="dao" />
+	</bean>
+
+	<!-- 删除类别的页面，需要管理员 -->
+	<bean name="/admin/deleteCatelog.html" class="zblog.controller.DeleteCatelogController">
+		<property name="catelogDao" ref="catelogDao" />
+	</bean>
+
+	<!-- 删除回复的页面，需要管理员 -->
+	<bean name="/admin/deleteReply.html" class="zblog.controller.DeleteReplyController">
+		<property name="replyDao" ref="replyDao" />
+	</bean>
+
+	<!-- 重置catelog计数的页面，需要管理员 -->
+	<bean name="/admin/resetCatelog.html" class="zblog.controller.ResetCatelogController">
+		<property name="dao" ref="dao" />
+	</bean>
 
 
-    <!-- interceptors -->
-    <bean id="blogCreationInterceptor" class="zblog.interceptor.BlogCreationInterceptor">
-        <property name="blogDao" ref="blogDao" />
-    </bean>
+	<!-- 测试错误的页面 -->
+	<bean name="/error.html" class="zblog.controller.ErrorController" />
 
-    <!-- 使用JdoTemplate的一个代价，由于jdo要求显式地detach才能使用对象 -->
-    <!-- 因此利用下面的Interceptor来将使pm保持在整个会话 中 -->
-    <bean id="openPersistenceManagerInView"
-        class="org.springframework.orm.jdo.support.OpenPersistenceManagerInViewInterceptor">
-        <property name="persistenceManagerFactory" ref="pmf" />
-    </bean>
+	<bean id="webBindingInitializer" class="zblog.gae.BindingInitializer" />
 
-    <bean
-        class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
-        <property name="interceptors">
-            <list>
-                <ref bean="openPersistenceManagerInView" />
-                <ref bean="blogCreationInterceptor" />
-            </list>
-        </property>
-    </bean>
+	<bean id="rssView" class="zblog.viewer.RSSView">
+		<property name="dao" ref="dao" />
+	</bean>
 
-    <bean id="exceptionResolver" class="zblog.exception.JAppHandlerExceptionResolver" />
+
+	<!-- interceptors -->
+	<bean id="blogCreationInterceptor" class="zblog.interceptor.BlogCreationInterceptor">
+		<property name="blogDao" ref="blogDao" />
+	</bean>
+
+	<!-- 使用JdoTemplate的一个代价，由于jdo要求显式地detach才能使用对象 -->
+	<!-- 因此利用下面的Interceptor来将使pm保持在整个会话 中 -->
+	<bean id="openPersistenceManagerInView"
+		class="org.springframework.orm.jdo.support.OpenPersistenceManagerInViewInterceptor">
+		<property name="persistenceManagerFactory" ref="pmf" />
+	</bean>
+
+	<bean
+		class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping">
+		<property name="interceptors">
+			<list>
+				<ref bean="openPersistenceManagerInView" />
+				<ref bean="blogCreationInterceptor" />
+			</list>
+		</property>
+	</bean>
+
+	<bean id="exceptionResolver" class="zblog.exception.JAppHandlerExceptionResolver" />
 
 </beans>
