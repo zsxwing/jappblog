@@ -14,7 +14,10 @@
 			<script type="text/javascript" src="../jquery/js/jquery-1.4.2.min.js"></script>
 			<script type="text/javascript" src="../jquery/js/jquery.combobox.js"></script>
 			
+			<#assign htmlEscape = true in spring>
 			<p><@spring.formTextarea "article.content"/></p>
+			<#assign htmlEscape = false in spring>
+			
 			<p><@spring.showErrors ","/></p>
 			<script type="text/javascript" src="../ckeditor/ckeditor.js"></script>
 			<script type="text/javascript">
@@ -28,6 +31,15 @@
         				filebrowserFlashUploadUrl : '/admin/upload.html',
         				on: {
         					instanceReady: function(ev) {
+                                this.dataProcessor.writer.setRules( 'pre',
+                                    {
+                                        indent : false,
+                                        breakBeforeOpen : false,
+                                        breakAfterOpen : false,
+                                        breakBeforeClose : false,
+                                        breakAfterClose : false
+                                    });
+                                
         						// catelog的提示功能 
             					jQuery("#catelog").combobox({
 									values : [ ${catelogs} ]
