@@ -1,7 +1,6 @@
 package zblog.controller;
 
 import java.util.Date;
-import java.util.logging.Logger;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,15 +19,11 @@ import zblog.dao.Dao;
 import zblog.entry.Article;
 import zblog.entry.Catelog;
 import zblog.entry.Resource;
-import zblog.viewer.TextView;
 
 import com.evernote.edam.type.Note;
 import com.google.appengine.api.datastore.Blob;
 
 public class PostEvernoteNoteController extends AbstractCommandController {
-
-	private static final Logger logger = Logger
-			.getLogger(PostEvernoteNoteController.class.getName());
 
 	private Dao dao;
 

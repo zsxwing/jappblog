@@ -6,7 +6,7 @@
 <div id="content">
 	<div class="postsingle">
 		    <h2 class="posttitle"><span class="intitle">${article.title}</span></h2>
-            <p class="postmeta">作者: <strong>${article.authorName}</strong> 日期: ${article.date?string("yyyy-MM-dd HH:mm:ss")} </p>
+            <p class="postmeta">作者: <strong>${article.authorName}</strong> 更新: ${article.date?string("yyyy-MM-dd HH:mm:ss")} 发布: ${article.createDate?string("yyyy-MM-dd HH:mm:ss")}</p>
 		    
 		    <div class="postentry">
 		    <#noescape>${article.content}</#noescape>

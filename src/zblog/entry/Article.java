@@ -29,6 +29,9 @@ public class Article {
 	private Date date;
 
 	@Persistent
+	private Date createDate;
+
+	@Persistent
 	private User author;
 
 	@Persistent
@@ -44,7 +47,7 @@ public class Article {
 	public void setCatelog(String catelog) {
 		this.catelog = catelog;
 	}
-	
+
 	public String getEncodedCatelog() {
 		try {
 			return URLEncoder.encode(catelog, "UTF-8");
@@ -82,6 +85,9 @@ public class Article {
 	}
 
 	public void setDate(Date date) {
+		if (createDate == null) {
+			createDate = date;
+		}
 		this.date = date;
 	}
 
@@ -103,6 +109,14 @@ public class Article {
 
 	public void setContent(String content) {
 		this.content = new Text(content);
+	}
+
+	public Date getCreateDate() {
+		return createDate == null ? date : createDate;
+	}
+
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
 	}
 
 	public String getSummary() {
