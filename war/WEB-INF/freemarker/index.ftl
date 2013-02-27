@@ -7,7 +7,7 @@
 		<#list articles as article>
 			<div class="postindex">
 				<h2 class="posttitle"><a href="/show.html?id=${article.articleID?c}">${article.title}</a></h2>
-		        <p class="postmeta">作者: <strong>${article.authorName}</strong> 日期: ${article.date?string("yyyy-MM-dd HH:mm:ss")} </p>
+		        <p class="postmeta">作者: <strong>${article.authorName}</strong> 更新: ${article.date?string("yyyy-MM-dd HH:mm:ss")} 发布: ${article.createDate?string("yyyy-MM-dd HH:mm:ss")}</p>
 			    
 			    <div class="postentry">
 			    <#noescape>${article.summary}</#noescape>
