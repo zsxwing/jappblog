@@ -10,7 +10,7 @@
 			<p><label>标题：</label><@spring.formInput "article.title"/><@spring.showErrors ","/></p>
 			
 			
-			<p><label>类别：</label><@spring.formInput "article.catelog"/><@spring.showErrors ","/></p>
+			<p><label>类别：</label><@spring.formInput "article.catelog" "autocomplete='false'"/><@spring.showErrors ","/></p>
 			<script type="text/javascript" src="../jquery/js/jquery-1.4.2.min.js"></script>
 			<script type="text/javascript" src="../jquery/js/jquery.combobox.js"></script>
 			
