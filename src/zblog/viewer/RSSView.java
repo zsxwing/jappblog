@@ -60,7 +60,7 @@ public class RSSView extends AbstractView {
 	private SyndEntry createEntry(Blog blog, Article article) {
 		SyndEntry entry = new SyndEntryImpl();
 		entry.setTitle(article.getTitle());
-		entry.setPublishedDate(article.getDate());
+		entry.setPublishedDate(article.getCreateDate());
 		entry.setLink("http://" + blog.getHost() + "/show.html?id="
 				+ article.getKey().getId());
 
