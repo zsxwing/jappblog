@@ -30,7 +30,7 @@ public class ShowController extends AbstractController {
 							"show", article.getTitle());
 					mav.addObject("article", article);
 					mav.addObject("show", true);
-					mav.addObject("displayMath", article.isDisplayMath());
+					mav.addObject("displayMath", article.getDisplayMath());
 					mav.addObject("replies",
 							dao.getReplyDao().queryReply(article));
 					return mav;

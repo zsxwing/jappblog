@@ -43,11 +43,11 @@ public class Article {
 	@Persistent
 	private Boolean displayMath;
 
-	public boolean isDisplayMath() {
+	public Boolean getDisplayMath() {
 		return displayMath == null ? false : displayMath;
 	}
 
-	public void setDisplayMath(boolean displayMath) {
+	public void setDisplayMath(Boolean displayMath) {
 		this.displayMath = displayMath;
 	}
 
