@@ -40,6 +40,17 @@ public class Article {
 	@Persistent
 	private String catelog;
 
+	@Persistent
+	private Boolean displayMath;
+
+	public boolean isDisplayMath() {
+		return displayMath == null ? false : displayMath;
+	}
+
+	public void setDisplayMath(boolean displayMath) {
+		this.displayMath = displayMath;
+	}
+
 	public String getCatelog() {
 		return catelog;
 	}

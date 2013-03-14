@@ -52,6 +52,9 @@
 			<p><label>允许回复：</label>
 				<@spring.formSingleSelect "article.allowReply" replyMap />
 			</p>
+			<p><label>使用Mathjax显示公式：</label>
+                <@spring.formSingleSelect "article.displayMath" displayMathMap />
+            </p>
 			
 			<p><input type="submit" value="提交" /></p>
 			<#if id??>

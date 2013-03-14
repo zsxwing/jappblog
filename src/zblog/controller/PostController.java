@@ -91,8 +91,14 @@ public class PostController extends SimpleFormController {
         Map replyMap = new HashMap();
         replyMap.put("true", "是");
         replyMap.put("false", "否");
+        
+        Map displayMathMap = new HashMap();
+        displayMathMap.put("true", "是");
+        displayMathMap.put("false", "否");
+        
         Map map = new HashMap();
         map.put("replyMap", replyMap);
+        map.put("displayMathMap", displayMathMap);
         map.put("blog", dao.getBlogDao().get());
         map.put("title", "编辑文章");
 

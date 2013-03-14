@@ -6,3 +6,11 @@
   SyntaxHighlighter.config.clipboardSwf = '/ckeditor/plugins/syntaxhighlight/scripts/clipboard.swf';
   SyntaxHighlighter.all();
 </script>
+<#if displayMath??>
+<#if displayMath >
+<script type="text/javascript"
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+</#if>
+</#if>
+
