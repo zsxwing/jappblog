@@ -58,6 +58,10 @@ public class ReplyController extends AbstractCommandController {
 		if (reply.getContent().length() > 200) {
 			return "内容不能超过200字";
 		}
+		
+		if (reply.getContent().contains("url=http")) {
+			return "验证码错误";
+		}
 
 		String remoteAddr = request.getRemoteAddr();
 		ReCaptchaImpl reCaptcha = new ReCaptchaImpl();
@@ -71,7 +75,7 @@ public class ReplyController extends AbstractCommandController {
 		if (StringUtils.isEmpty(challenge) || StringUtils.isEmpty(uresponse)) {
 			return "验证码不能为空";
 		}
-
+		
 		ReCaptchaResponse reCaptchaResponse = reCaptcha.checkAnswer(remoteAddr,
 				challenge, uresponse);
 
