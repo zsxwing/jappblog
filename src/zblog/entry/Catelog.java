@@ -1,5 +1,6 @@
 package zblog.entry;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
@@ -11,7 +12,10 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(detachable = "true")
-public class Catelog {
+public class Catelog implements Serializable {
+
+	private static final long serialVersionUID = -843243637563880971L;
+
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;

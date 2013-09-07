@@ -1,5 +1,6 @@
 package zblog.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.jdo.JDOException;
@@ -9,6 +10,7 @@ import javax.jdo.Query;
 import org.springframework.orm.jdo.JdoCallback;
 import org.springframework.orm.jdo.JdoTemplate;
 
+import zblog.Util;
 import zblog.entry.Article;
 import zblog.entry.Reply;
 
@@ -25,35 +27,63 @@ public class ReplyDao extends JdoTemplate {
 
 	public void save(Reply reply) {
 		this.makePersistent(reply);
+		updateReplyInCache(reply);
 	}
 
 	public void delete(long id) {
-		this.deletePersistent(get(id));
+		Reply reply = get(id);
+		this.deletePersistent(reply);
+		deleteReplyInCache(reply);
 	}
 
 	public Reply get(long id) {
-		return (Reply) this.getObjectById(Reply.class, id);
+		Reply reply = (Reply) Util.getFromCache("reply_" + id);
+		if (reply == null) {
+			reply = (Reply) this.getObjectById(Reply.class, id);
+		}
+		return reply;
 	}
 
 	public void deleteReply(Article article) {
-		this.deletePersistentAll(queryReply(article));
+		Collection<Reply> replies = queryReply(article);
+		this.deletePersistentAll(replies);
+		for (Reply reply : replies) {
+			deleteReplyInCache(reply);
+		}
+	}
+
+	private void updateReplyInCache(Reply reply) {
+		Util.putToCache("reply_" + reply.getReplyID(), reply);
+		Util.deleteFromCache("article_reply_" + reply.getArticleID());
+		Util.deleteFromCache("latest_replies");
+	}
+
+	private void deleteReplyInCache(Reply reply) {
+		Util.deleteFromCache("reply_" + reply.getReplyID());
+		Util.deleteFromCache("article_reply_" + reply.getArticleID());
+		Util.deleteFromCache("latest_replies");
 	}
 
 	@SuppressWarnings("unchecked")
 	public Collection<Reply> queryReply(Article article) {
-		try {
-			return (Collection<Reply>) this.find(Reply.class,
+		Collection<Reply> replies = (Collection<Reply>) Util
+				.getFromCache("article_reply_" + article.getArticleID());
+		if (replies == null) {
+			replies = (Collection<Reply>) this.find(Reply.class,
 					"articleID == articleIDParam", "Long articleIDParam",
 					new Object[] { article.getArticleID() });
-		} catch (Exception e) {
+			Util.putToCache("article_reply_" + article.getArticleID(),
+					new ArrayList<Reply>(replies));
 		}
-		return null;
+		return replies;
 	}
 
 	@SuppressWarnings("unchecked")
 	public Collection<Reply> getLatestReply() {
-		try {
-			return (Collection<Reply>) execute(new JdoCallback() {
+		Collection<Reply> replies = (Collection<Reply>) Util
+				.getFromCache("latest_replies");
+		if (replies == null) {
+			replies = (Collection<Reply>) execute(new JdoCallback() {
 				public Object doInJdo(PersistenceManager pm)
 						throws JDOException {
 					Query query = pm.newQuery(Reply.class);
@@ -63,8 +93,8 @@ public class ReplyDao extends JdoTemplate {
 					return query.execute();
 				}
 			}, true);
-		} catch (Exception e) {
+			Util.putToCache("latest_replies", new ArrayList<Reply>(replies));
 		}
-		return null;
+		return replies;
 	}
 }

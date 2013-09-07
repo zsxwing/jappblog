@@ -1,5 +1,6 @@
 package zblog.dao;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,7 @@ import org.datanucleus.store.appengine.query.JDOCursorHelper;
 import org.springframework.orm.jdo.JdoCallback;
 import org.springframework.orm.jdo.JdoTemplate;
 
+import zblog.Util;
 import zblog.entry.Article;
 
 import com.google.appengine.api.datastore.Cursor;
@@ -21,18 +23,27 @@ public class ArticleDao extends JdoTemplate {
 
 	public void save(Article article) {
 		this.makePersistent(article);
+		Util.putToCache("article_" + article.getArticleID(), article);
+		Util.deleteFromCache("latest_article");
 	}
 
 	public Article get(long id) {
-		return (Article) this.getObjectById(Article.class, id);
+		Article article = (Article) Util.getFromCache("article_" + id);
+		if (article == null) {
+			article = (Article) this.getObjectById(Article.class, id);
+			Util.putToCache("article_" + article.getArticleID(), article);
+		}
+		return article;
 	}
 
 	public void delete(long id) {
-		this.deletePersistent(get(id));
+		delete(get(id));
 	}
-	
+
 	public void delete(Article article) {
 		this.deletePersistent(article);
+		Util.deleteFromCache("article_" + article.getArticleID());
+		Util.deleteFromCache("latest_article");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -44,15 +55,22 @@ public class ArticleDao extends JdoTemplate {
 
 	@SuppressWarnings("unchecked")
 	public Collection<Article> listLatest() {
-		return (Collection<Article>) execute(new JdoCallback() {
-			public Object doInJdo(PersistenceManager pm) throws JDOException {
-				Query query = pm.newQuery(Article.class);
-				prepareQuery(query);
-				query.setOrdering("date desc");
-				query.setRange(0, 10);
-				return query.execute();
-			}
-		}, true);
+		Collection<Article> articles = (Collection<Article>) Util
+				.getFromCache("latest_article");
+		if (articles == null) {
+			articles = (Collection<Article>) execute(new JdoCallback() {
+				public Object doInJdo(PersistenceManager pm)
+						throws JDOException {
+					Query query = pm.newQuery(Article.class);
+					prepareQuery(query);
+					query.setOrdering("date desc");
+					query.setRange(0, 10);
+					return query.execute();
+				}
+			}, true);
+			Util.putToCache("latest_article", new ArrayList<Article>(articles));
+		}
+		return articles;
 	}
 
 	@SuppressWarnings("unchecked")

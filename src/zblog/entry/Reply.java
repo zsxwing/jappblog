@@ -1,5 +1,6 @@
 package zblog.entry;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -12,7 +13,10 @@ import zblog.Util;
 import com.google.appengine.api.datastore.Key;
 
 @PersistenceCapable(detachable = "true")
-public class Reply {
+public class Reply implements Serializable {
+	
+	private static final long serialVersionUID = 6211347306992616106L;
+
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;

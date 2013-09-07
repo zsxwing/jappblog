@@ -1,5 +1,6 @@
 package zblog.entry;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Date;
@@ -14,7 +15,10 @@ import com.google.appengine.api.datastore.Text;
 import com.google.appengine.api.users.User;
 
 @PersistenceCapable(detachable = "true")
-public class Article {
+public class Article implements Serializable {
+
+	private static final long serialVersionUID = 2720258513047610358L;
+
 	@PrimaryKey
 	@Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
 	private Key key;
